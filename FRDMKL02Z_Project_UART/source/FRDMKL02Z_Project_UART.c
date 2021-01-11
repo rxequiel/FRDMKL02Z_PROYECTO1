@@ -51,6 +51,7 @@
  */
 //------funcion para enceder o apagar los leds -----
 void led(uint8_t entrada){
+	// con este switch se eligira segun la letra ingresada que led se enciende y apaga
 	switch(entrada){
 	case 'A': GPIO_PortClear(GPIOB, 1u << 10u);printf("LED AZUL ON\r\n");break;
 	case 'a': GPIO_PortSet(GPIOB, 1u << 10u);printf("LED AZUL OFF\r\n");break;
@@ -74,20 +75,20 @@ int main(void) {
     BOARD_InitDebugConsole();
 #endif
 
-    (void)uart0Inicializar(115200);
+    (void)uart0Inicializar(115200); //llamamos a la función de inicializar el puerto UART0
 
    while(1) {
-    	status_t status;
-    	uint8_t nuevo_byte;
+    	status_t status;    //nos permitira conocer el estado de la lectura de datos del serial
+    	uint8_t nuevo_byte; //almacenara el dato ingresado a traves del  serial
 
     	if(uart0NuevosDatosEnBuffer()>0){
     		status=uart0LeerByteDesdeBufferCircular(&nuevo_byte);
     		if(status==kStatus_Success){
-    			//printf("dato:%c\r\n",nuevo_byte);
-    			led(nuevo_byte);
+
+    			led(nuevo_byte); //hacemos un llamado a la funcion que contiene las ordenes de los leds segun la letra que se ingrese
 
     		}else{
-    			printf("error\r\n");
+    			printf("error\r\n"); //en caso de haber problemas con el UART0 notificara con un error
     		}
     	}
     }
